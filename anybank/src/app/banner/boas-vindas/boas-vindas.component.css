@@ -1,0 +1,35 @@
+.boas-vindas {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem; /* menos espaço entre data e título */
+  padding: 0; /* remove padding da caixa */
+  background: transparent; /* remove a cor branca */
+  box-shadow: none; /* remove sombra */
+  border-radius: 0; /* remove cantos arredondados */
+  max-width: 100%; /* ocupa todo o espaço do conteúdo */
+  margin-bottom: 1rem;
+}
+
+/* Data ou subtítulo */
+.data {
+  font-size: 0.875rem;
+  color: var(--cinza-escuro);
+  font-weight: 400;
+  margin: 0;
+}
+
+/* Título principal */
+.titulo {
+  font-size: 2rem;
+  font-weight: 600;
+  line-height: 1.3;
+  color: var(--preto);
+  margin: 0;
+}
+
+/* Texto adicional opcional */
+.resumo {
+  font-size: 1rem;
+  color: var(--cinza-medio);
+  line-height: 1.5;
+}

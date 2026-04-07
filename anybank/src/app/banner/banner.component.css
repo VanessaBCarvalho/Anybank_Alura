@@ -1,0 +1,29 @@
+.banner {
+  border-radius: 0.5rem; /* cantos arredondados */
+  background: var(--gradiente-azul); /* gradiente suave */
+  padding: 3rem 2.5rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  /* sombra sutil para suavizar contraste com o conteúdo */
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+
+@media screen and (max-width: 71rem) {
+  .banner {
+    padding: 3rem 1rem;
+
+
+    flex-direction: column;
+    align-items: center;
+    row-gap: 4rem;
+  }
+
+
+  .boas-vindas,
+  .conta {
+    width: 70%;
+  }
+}
