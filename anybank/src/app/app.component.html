@@ -1,9 +1,20 @@
 <div class="layout">
-  <app-lateral></app-lateral>
-<div class="app">
-  <div class="banner-form-wrapper">
-    <app-banner />
-    <app-form-nova-transacao (transacaoCriada)="processarTransacao($event)"/>
+
+  <app-lateral
+    (toggle)="isSidebarOpen = $event"
+    [class.closed]="!isSidebarOpen">
+  </app-lateral>
+
+  <div class="app">
+
+    <div class="banner-form-wrapper">
+      <app-banner [saldo]="saldo()"></app-banner>
+
+      <app-form-nova-transacao
+        (transacaoCriada)="processarTransacao($event)">
+      </app-form-nova-transacao>
+    </div>
+
   </div>
-</div>
+
 </div>

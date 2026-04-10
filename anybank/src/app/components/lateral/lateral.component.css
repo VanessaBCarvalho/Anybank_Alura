@@ -1,7 +1,6 @@
 .lateral {
   width: 250px;
   height: 100vh;
-  position: fixed;
   background: var(--gradiente-azul);
   color: black;
   display: flex;
@@ -64,4 +63,61 @@
   width: 20px;
   height: 20px;
   fill: black;
+}
+
+.lateral {
+  width: 250px;
+  transition: width 0.3s ease;
+  flex-shrink: 0;
+}
+
+.lateral.closed {
+  width: 80px;
+}
+
+.lateral.closed .perfil {
+  display: flex;
+  justify-content: center;
+}
+
+.lateral.closed .perfil img {
+  width: 50px;
+  height: 50px;
+}
+
+/* esconde textos do perfil */
+.lateral.closed .perfil h3,
+.lateral.closed .perfil p,
+.lateral.closed .perfil strong,
+.lateral.closed .perfil span {
+  display: none;
+}
+
+.lateral.closed .menu li {
+  justify-content: center;
+}
+
+/* esconde o texto, mantém só ícone */
+.lateral.closed .menu li span {
+  display: none;
+}
+
+.toggle-btn {
+  background: none;
+  border: none;
+  font-size: 20px;
+  cursor: pointer;
+  align-self: flex-end;
+  margin-bottom: 10px;
+}
+
+app-lateral {
+  width: 250px;
+  flex-shrink: 0; /* 👈 impede encolher errado */
+  transition: width 0.3s ease;
+}
+
+/* quando colapsa */
+app-lateral.closed {
+  width: 80px;
 }

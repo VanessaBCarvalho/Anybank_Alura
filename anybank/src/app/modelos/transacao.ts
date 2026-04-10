@@ -7,6 +7,6 @@ export class Transacao {
 
 
 export enum TipoTransacao{
-    DEPOSITO = 'deposito',
-    SAQUE = 'saque'
+    DEPOSITO = 'Depósito',
+    SAQUE = 'Saque'
 }

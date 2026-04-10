@@ -1,16 +1,20 @@
-<div class="lateral">
+<div class="lateral" [class.closed]="!isOpen">
+  <button class="toggle-btn" (click)="toggleSidebar()"> ☰</button>
   <div class="perfil">
     <img [src]="usuario.avatar" alt="Avatar" />
+
+    <div *ngIf="isOpen">
     <h3>{{ usuario.nome }}</h3>
     <p>{{ usuario.banco }}</p>
+  </div>
   </div>
 
   <nav class="menu">
     <ul>
-      <li>🏠 Início</li>
-      <li>💰 Contas</li>
-      <li>📊 Investimentos</li>
-      <li>⚙️ Configurações</li>
+      <li>🏠 <span>Início</span></li>
+      <li>💰 <span>Contas</span></li>
+      <li>📊 <span>Investimentos</span></li>
+      <li>⚙️ <span>Configurações</span></li>
     </ul>
   </nav>
 </div>
