@@ -1,9 +1,11 @@
+import { NgIf } from '@angular/common';
 import { Component, EventEmitter, Output } from '@angular/core';
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-lateral',
   standalone: true,
-  imports: [],
+  imports: [RouterLink, NgIf],
   templateUrl: './lateral.component.html',
   styleUrl: './lateral.component.css'
 })

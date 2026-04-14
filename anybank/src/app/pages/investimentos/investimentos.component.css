@@ -1,0 +1,25 @@
+h3 {
+  margin-top: 20px;
+}
+
+/* container dos gráficos lado a lado */
+.graficos-container {
+  display: flex;
+  gap: 20px;
+  align-items: flex-start;
+  justify-content: space-between;
+  flex-wrap: wrap; /* evita quebrar em telas menores */
+}
+
+/* cada gráfico */
+.grafico {
+  flex: 1;
+  min-width: 320px;  /* evita ficar esmagado */
+  height: 220px;
+}
+
+/* canvas ocupa o container */
+canvas {
+  width: 100% !important;
+  height: 100% !important;
+}

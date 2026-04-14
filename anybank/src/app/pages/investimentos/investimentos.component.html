@@ -1,0 +1,20 @@
+<div class="graficos-container">
+
+  <!-- 📊 Bitcoin -->
+  <div class="grafico">
+    <h3>🟠 Bitcoin</h3>
+
+    <canvas id="btcChart"></canvas>
+
+    <p>💰 Atual: {{ bitcoin?.bid | currency:'BRL':'symbol':'1.2-2' }}</p>
+    <p>📈 Alta: {{ bitcoin?.high | currency:'BRL':'symbol':'1.2-2' }}</p>
+    <p>📉 Baixa: {{ bitcoin?.low | currency:'BRL':'symbol':'1.2-2' }}</p>
+  </div>
+
+  <!-- 📊 Ibovespa -->
+  <div class="grafico">
+    <h3>🔵 Ibovespa</h3>
+    <canvas id="ibovChart"></canvas>
+  </div>
+
+</div>

@@ -1,0 +1,5 @@
+<app-banner [saldo]="banco.saldo()"></app-banner>
+
+<app-form-nova-transacao
+  (transacaoCriada)="processarTransacao($event)">
+</app-form-nova-transacao>

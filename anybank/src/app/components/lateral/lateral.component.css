@@ -121,3 +121,8 @@ app-lateral {
 app-lateral.closed {
   width: 80px;
 }
+
+a {
+  text-decoration: none;
+  color: inherit;
+}
