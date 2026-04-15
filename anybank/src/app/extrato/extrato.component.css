@@ -1,22 +1,58 @@
-.extrato {
-    border-radius: 0.5rem;
-    background: var(--fundo-cinza-claro, #F5F5F5);
-    padding: 2rem 1.5rem;
-    min-height: 100%;
-
-    display: flex;
-    flex-direction: column;
-    gap: 2rem;
+:host {
+  display: block;
+  padding: 20px;
+  background:#dddddd3d; 
+  font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
 }
 
+/* título */
 .titulo {
-    font-size: 1.5625rem;
-    font-weight: 600;
-    line-height: 125%;
+  font-size: 20px;
+  font-weight: 700;
+  color: #111;
+  margin-bottom: 16px;
 }
 
+/* lista */
 .transacoes {
-    display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+/* card da transação */
+.transacoes li {
+  background: #fff;
+  border-radius: 14px;
+  padding: 14px 16px;
+
+  border: 1px solid rgba(0,0,0,0.04);
+
+  box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+
+.transacoes li:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 14px rgba(0,0,0,0.08);
+}
+
+/* estado vazio */
+.empty {
+  text-align: center;
+  padding: 16px;
+  color: #8a8a8a;
+  background: #fff;
+  border-radius: 14px;
+  border: 1px dashed #ddd;
+}
+
+.badge {
+  display: none;
 }

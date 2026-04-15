@@ -1,18 +1,23 @@
 <aside class="extrato">
-<h2 class="titulo">Extrato</h2>
 
-<ul class="transacoes">
+  <div class="header">
+    <h2 class="titulo">Extrato</h2>
+    <span class="badge">{{ transacoes().length }} itens</span>
+  </div>
+
+  <ul class="transacoes">
+
     @for (transacao of transacoes(); track transacao.id) {
-    <li>
+      <li class="item">
         <app-transacao [transacao]="transacao"></app-transacao>
-    </li>
-    } @empty{
-        <li aria-hidden="true">
-            Ainda não há transações.
-        </li>
+      </li>
+    } @empty {
+      <li class="empty">
+        Ainda não há transações.
+      </li>
     }
 
-  
-</ul>
+  </ul>
+
 </aside>
 

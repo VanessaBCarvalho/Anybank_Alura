@@ -14,9 +14,9 @@ export class InvestimentosService {
   );
 }
 
-getIbovespa() {
-  return this.http.get(
-    'https://query1.finance.yahoo.com/v7/finance/quote?symbols=^BVSP'
+getDolar() {
+  return this.http.get<any>(
+    'https://economia.awesomeapi.com.br/json/last/USD-BRL'
   );
 }
 }

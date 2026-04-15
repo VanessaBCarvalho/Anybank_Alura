@@ -1,145 +1,165 @@
-import { Component, inject, AfterViewInit } from '@angular/core';
+import { Component, inject, AfterViewInit, OnDestroy } from '@angular/core';
 import { InvestimentosService } from '../../services/investimentos.service';
 import { Chart } from 'chart.js/auto';
-import { interval, switchMap } from 'rxjs';
+import { interval, switchMap, startWith, takeUntil, Subject } from 'rxjs';
 import { CommonModule } from '@angular/common';
-
 
 @Component({
   selector: 'app-investimentos',
   standalone: true,
-   imports: [CommonModule],
+  imports: [CommonModule],
   templateUrl: './investimentos.component.html',
   styleUrl: './investimentos.component.css'
 })
-export class InvestimentosComponent implements AfterViewInit {
+export class InvestimentosComponent implements AfterViewInit, OnDestroy {
 
   api = inject(InvestimentosService);
 
-  bitcoin: any;
-
   chart!: Chart;
-  ibovChart!: Chart;
+  usdChart!: Chart;
 
   valoresBTC: number[] = [];
   labelsBTC: string[] = [];
 
-  valoresIBOV: number[] = [];
-  labelsIBOV: string[] = [];
+  valoresUSD: number[] = [];
+  labelsUSD: string[] = [];
+
+  private destroy$ = new Subject<void>();
+  bitcoin: any;
+  usd: any;
 
   ngAfterViewInit() {
     this.criarGraficoBTC();
-    this.criarGraficoIBOV();
+    this.criarGraficoUSD();
     this.iniciarAtualizacao();
   }
 
   // 📊 BTC
   criarGraficoBTC() {
-  const ctx = document.getElementById('btcChart') as HTMLCanvasElement;
+    const ctx = document.getElementById('btcChart') as HTMLCanvasElement | null;
+    if (!ctx) return;
 
-  this.chart = new Chart(ctx, {
-    type: 'line',
-    data: {
-      labels: this.labelsBTC,
-      datasets: [
-        {
-          label: 'Bitcoin (R$)',
-          data: this.valoresBTC,
-          borderWidth: 2,
-          tension: 0.3,
-
-          segment: {
-            borderColor: (ctx) => {
-
-              const prev = ctx.p0?.parsed?.y;
-              const curr = ctx.p1?.parsed?.y;
-
-              if (prev == null || curr == null) {
-                return '#f7931a';
+    this.chart = new Chart(ctx, {
+      type: 'line',
+      data: {
+        labels: this.labelsBTC,
+        datasets: [
+          {
+            label: 'Bitcoin (R$)',
+            data: this.valoresBTC,
+            borderWidth: 2,
+            tension: 0.3,
+            segment: {
+              borderColor: (ctx) => {
+                const prev = ctx.p0?.parsed?.y;
+                const curr = ctx.p1?.parsed?.y;
+                if (prev == null || curr == null) return '#f7931a';
+                return curr >= prev ? '#16a34a' : '#dc2626';
               }
-
-              return curr >= prev ? '#16a34a' : '#dc2626';
             }
           }
-        }
-      ]
-    },
-    options: {
-      responsive: true,
-      maintainAspectRatio: false
-    }
-  });
-}
+        ]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false
+      }
+    });
+  }
 
-  // 📊 IBOV
-  criarGraficoIBOV() {
-  const ctx = document.getElementById('ibovChart') as HTMLCanvasElement;
+  // 💵 USD
+  criarGraficoUSD() {
+    const ctx = document.getElementById('usdChart') as HTMLCanvasElement | null;
+    if (!ctx) return;
 
-  this.ibovChart = new Chart(ctx, {
-    type: 'line',
-    data: {
-      labels: this.labelsIBOV,
-      datasets: [
-        {
-          label: 'Ibovespa',
-          data: this.valoresIBOV,
-          borderWidth: 2,
-          borderColor: '#2563eb',
-          backgroundColor: 'rgba(37, 99, 235, 0.2)',
-          tension: 0.3,
-          fill: true
-        }
-      ]
-    },
-    options: {
-      responsive: true,
-      maintainAspectRatio: false
-    }
-  });
-}
+    this.usdChart = new Chart(ctx, {
+      type: 'line',
+      data: {
+        labels: this.labelsUSD,
+        datasets: [
+          {
+            label: 'Dólar (R$)',
+            data: this.valoresUSD,
+            borderWidth: 2,
+            tension: 0.3,
+            segment: {
+              borderColor: (ctx) => {
+                const prev = ctx.p0?.parsed?.y;
+                const curr = ctx.p1?.parsed?.y;
+                if (prev == null || curr == null) return '#2563eb';
+                return curr >= prev ? '#16a34a' : '#dc2626';
+              }
+            }
+          }
+        ]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false
+      }
+    });
+  }
 
-  
+  // 🔄 Atualização
   iniciarAtualizacao() {
 
     // 📡 Bitcoin
     interval(10000).pipe(
-      switchMap(() => this.api.getBitcoin())
-    ).subscribe((data: any) => {
+  startWith(0),
+  switchMap(() => this.api.getBitcoin()),
+  takeUntil(this.destroy$)
+).subscribe((data: any) => {
 
-      const btc = data.BTCBRL;
-      this.bitcoin = btc;
+  const btc = data.BTCBRL;
 
-      const valor = Number(btc.bid);
+  this.bitcoin = btc;
 
-      this.valoresBTC.push(valor);
-      this.labelsBTC.push(new Date().toLocaleTimeString());
+  const valor = Number(btc.bid);
 
-      if (this.valoresBTC.length > 10) {
-        this.valoresBTC.shift();
-        this.labelsBTC.shift();
-      }
+  this.valoresBTC = [...this.valoresBTC, valor];
+  this.labelsBTC = [...this.labelsBTC, new Date().toLocaleTimeString()];
 
-      this.chart.update();
-    });
+  if (this.valoresBTC.length > 10) {
+    this.valoresBTC = this.valoresBTC.slice(1);
+    this.labelsBTC = this.labelsBTC.slice(1);
+  }
 
-    // 📡 Ibovespa
+  this.chart.data.labels = this.labelsBTC;
+  this.chart.data.datasets[0].data = this.valoresBTC;
+
+  this.chart.update();
+});
+
+    // 💵 Dólar
     interval(10000).pipe(
-      switchMap(() => this.api.getIbovespa())
-    ).subscribe((data: any) => {
+  startWith(0),
+  switchMap(() => this.api.getDolar()),
+  takeUntil(this.destroy$)
+).subscribe((data: any) => {
 
-      const ibov = data.quoteResponse.result[0].regularMarketPrice;
+  const usd = data.USDBRL;
 
-      this.valoresIBOV.push(ibov);
-      this.labelsIBOV.push(new Date().toLocaleTimeString());
+  this.usd = usd; // 👈 ESSENCIAL
 
-      if (this.valoresIBOV.length > 10) {
-        this.valoresIBOV.shift();
-        this.labelsIBOV.shift();
-      }
+  const valor = Number(usd.bid);
 
-      if (this.ibovChart) {
-        this.ibovChart.update();
-      }
-    });
+  this.valoresUSD = [...this.valoresUSD, valor];
+  this.labelsUSD = [...this.labelsUSD, new Date().toLocaleTimeString()];
+
+  if (this.valoresUSD.length > 10) {
+    this.valoresUSD = this.valoresUSD.slice(1);
+    this.labelsUSD = this.labelsUSD.slice(1);
+  }
+
+  this.usdChart.data.labels = this.labelsUSD;
+  this.usdChart.data.datasets[0].data = this.valoresUSD;
+
+  this.usdChart.update();
+});
+  }
+
+  ngOnDestroy() {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 }
